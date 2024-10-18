@@ -1,0 +1,29 @@
+{
+    "password":"password",
+
+    "username":"root",
+
+    "host":"localhost",
+
+    "db_name":"stonks_db",
+
+
+    "all_tables":["Financial","Misc","Sentiment","Estimates"],
+
+    "Financial_cols":["Ticker","Name","MC","EV","TPE","FPE","PEG","PS","PB","EVR","EVEBITDA","PM","OM","ROA","ROE","R","RPS","EBITDA","COH","CPS","TD","DE","CR","BV","OCF","Beta","fiftytwoWR","fiftytwoWH","fiftytwoWL","percentHInisder","percentHInstitutions","SS","ADY","ADR","LSF","LSD"],
+
+    "Financial_datatypes":{"Ticker":"VARCHAR(50)","Name":"VARCHAR(50)","normal":"INT"},
+
+    "Misc_cols":["Ticker","Name","KeyExecutives","Description","UpcomingEvents","InsiderHoldings","InsiderTransactions","Sustainability"],
+
+    "Misc_datatypes":{"Ticker":"VARCHAR(50)","Name":"VARCHAR(50)","normal":"MEDIUMTEXT"},
+
+    "Sentiment_cols":["Ticker","Name","News","SocialMediaAnalysis"],
+
+    "Sentiment_datatypes":{"normal":"MEDIUMTEXT","News":"LONGTEXT"},
+
+    "Estimates_cols":["Ticker","Name","EarningsEstimates","RevenueEstimate","EPSTrend","EPSRevision","GrowthEstimates"],
+
+    "Estimates_datatypes":{"normal":"MEDIUMTEXT"}
+
+}
