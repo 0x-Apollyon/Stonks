@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stonks Signup - Join to get stock news, analysis, and trading features">
+    <title>Stonks - Signup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #0d47a1;
+            margin-bottom: 20px;
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .signup-form label {
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .signup-form input {
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            width: 100%;
+            position: relative; /* Positioning context for the eye icon */
+        }
+
+        .signup-form input:focus {
+            outline: none;
+            border-color: #0d47a1;
+            box-shadow: 0 0 8px rgba(13, 71, 161, 0.2);
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .signup-form button {
+            background-color: #ff6f00;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .signup-form button:hover {
+            background-color: #e65100;
+        }
+
+        .signup-form a {
+            color: #0d47a1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .signup-form a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <h2>Create Your Stonks Account</h2>
+        <p>Sign up to access stock news, analysis, and trading features</p>
+
+        <form class="signup-form" id="signupForm">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <div style="position: relative;">
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <span class="eye-icon" id="togglePassword">👁️</span>
+            </div>
+
+            <label for="confirm-password">Confirm Password</label>
+            <div style="position: relative;">
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                <span class="eye-icon" id="toggleConfirmPassword">👁️</span>
+            </div>
+
+            <div class="error-message" id="passwordMismatchError">Passwords do not match!</div>
+            <div class="error-message" id="passwordLengthError">Password must be at least 8 characters long!</div>
+
+            <button type="submit">Sign Up</button>
+
+            <a href="login">Already have an account? Log in here</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const passwordMismatchError = document.getElementById('passwordMismatchError');
+            const passwordLengthError = document.getElementById('passwordLengthError');
+
+            // Reset error messages
+            passwordMismatchError.style.display = 'none';
+            passwordLengthError.style.display = 'none';
+
+            // Check if the password and confirm password fields match
+            if (password !== confirmPassword) {
+                passwordMismatchError.style.display = 'block';  // Show mismatch error
+                return; // Stop execution
+            } else if (password.length < 8) {
+                passwordLengthError.style.display = 'block';  // Show length error
+                return; // Stop execution
+            }
+
+            // Prepare the data to send
+            const signupData = {
+                name: document.getElementById('name').value,
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: password,
+                confirmPassword: confirmPassword // Include confirm password
+            };
+
+            // Send the data as JSON
+            fetch('/create_account', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',  // Set Content-Type to application/json
+                },
+                body: JSON.stringify(signupData),  // Stringify the data
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Process the JSON response
+            })
+            .then(data => {
+                console.log('Success:', data);
+                // Optionally redirect or show a success message
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Optionally show an error message to the user
+            });
+        });
+
+        // Show/Hide password functionality
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.style.color = type === 'text' ? '#0d47a1' : '#aaa'; // Change icon color
+        });
+
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
+            const confirmPasswordField = document.getElementById('confirm-password');
+            const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordField.setAttribute('type', type);
+            this.style.color = type === 'text' ? '#0d47a1' : '#aaa'; // Change icon color
+        });
+    </script>
+</body>
+</html>
